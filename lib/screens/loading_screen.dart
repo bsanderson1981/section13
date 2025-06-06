@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 //start section 13   142
 class LoadingScreen extends StatefulWidget {
+
   @override
+
   _LoadingScreenState createState() => _LoadingScreenState();
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    _getLocation(); // Automatically run when the widget is inserted into the tree
+  }
 
   Future<void> _getLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
