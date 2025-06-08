@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '/services/location.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -19,20 +20,38 @@ class _LoadingScreenState extends State<LoadingScreen> {
     await location.getCurrentLocation();
     final double lat = location.latitude;
     final double lon = location.longitude;
-    print('Latitude: $lat');
-    print('Longitude: $lon');
+    //print('Latitude: $lat');
+    // print('Longitude: $lon');
 
     getData(lat, lon); // Now fetch weather data using coordinates
   }
 
   void getData(double lat, double lon) async {
-    http.Response  response = await http.get(
-      Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=50836a4419e6435e0b1f803d6a434a23'),
+    http.Response response = await http.get(
+      Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=50836a4419e6435e0b1f803d6a434a23',
+      ),
     );
 
     if (response.statusCode == 200) {
-      print(response.body); // raw JSON output
-      print('RCode: ${response.statusCode}');
+      String data = response.body;
+
+      var decodeData = jsonDecode(data);
+
+      double wtemp = decodeData['main']['temp'];
+      print('Tempature: $wtemp');
+
+      int weatherid = decodeData['weather'][0]['id'];
+      print('weatherid: $weatherid');
+
+      String name = decodeData['name'];
+      print('name: $name');
+
+      // tempature main.temp
+      // weather id   weather[0].id
+      // name   name
+      //print(response.body); // raw JSON output
+      // print('RCode: ${response.statusCode}');
     } else {
       print('Failed to get weather data: ${response.statusCode}');
     }
@@ -40,8 +59,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Text('Loading...')),
-    );
+    return Scaffold(body: Center(child: Text('Loading...')));
   }
 }
