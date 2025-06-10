@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:section13/screens/location_screen.dart';
+import 'package:section13/services/networking.dart';
 import '/services/location.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
+const apiKey = '50836a4419e6435e0b1f803d6a434a23';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -12,53 +14,47 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    getLocation(); // Automatically run when the widget is inserted into the tree
+    getLocationData(); // Automatically run when the widget is inserted into the tree
   }
 
-  void getLocation() async {
+  void getLocationData() async {
     Location location = Location();
     await location.getCurrentLocation();
-    final double lat = location.latitude;
-    final double lon = location.longitude;
-    //print('Latitude: $lat');
-    // print('Longitude: $lon');
 
-    getData(lat, lon); // Now fetch weather data using coordinates
-  }
+    // Using Palm Springs coordinates for now
+    final double lat = 33.8303; // or: location.latitude
+    final double lon = -116.5453; // or: location.longitude
 
-  void getData(double lat, double lon) async {
-    http.Response response = await http.get(
-      Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=50836a4419e6435e0b1f803d6a434a23',
-      ),
+    NetworkHelper networkHelper = NetworkHelper(
+      'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$apiKey',
     );
 
-    if (response.statusCode == 200) {
-      String data = response.body;
+    var weatherData = await networkHelper.getData();
+    print(weatherData);
 
-      var decodeData = jsonDecode(data);
-
-      double wtemp = decodeData['main']['temp'];
-      print('Tempature: $wtemp');
-
-      int weatherid = decodeData['weather'][0]['id'];
-      print('weatherid: $weatherid');
-
-      String name = decodeData['name'];
-      print('name: $name');
-
-      // tempature main.temp
-      // weather id   weather[0].id
-      // name   name
-      //print(response.body); // raw JSON output
-      // print('RCode: ${response.statusCode}');
-    } else {
-      print('Failed to get weather data: ${response.statusCode}');
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationScreen(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('Loading...')));
+    return Scaffold(
+      body: Center(child: Text('Loading...')),
+    );
   }
 }
+
+/*
+double wtemp = decodeData['main']['temp'];
+print('Temperature: $wtemp');
+
+int weatherId = decodeData['weather'][0]['id'];
+print('Weather ID: $weatherId');
+
+String name = decodeData['name'];
+print('City Name: $name');
+*/
