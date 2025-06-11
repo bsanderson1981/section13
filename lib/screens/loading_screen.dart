@@ -3,22 +3,36 @@ import 'package:section13/screens/location_screen.dart';
 import 'package:section13/services/networking.dart';
 import '/services/location.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-const apiKey = '50836a4419e6435e0b1f803d6a434a23';
+
+
+///final String? apiKey = dotenv.env['OPEN_WEATHER_API_KEY'];
+
+
 
 class LoadingScreen extends StatefulWidget {
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
+
+
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
+
     getLocationData(); // Automatically run when the widget is inserted into the tree
   }
 
   void getLocationData() async {
+
+      final String? apiKey = dotenv.env['OPEN_WEATHER_API_KEY'];
+      if (apiKey == null) {
+        print("❌ API key not loaded from .env");
+        return;
+      }
     Location location = Location();
     await location.getCurrentLocation();
 
@@ -31,7 +45,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
 
     var weatherData = await networkHelper.getData();
-    //print(weatherData);
+    print(weatherData);
 
     Navigator.push( context, MaterialPageRoute(builder: (context) {
       return LocationScreen(locationWeather: weatherData,
@@ -50,14 +64,3 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
   }
 }
-
-/*
-double wtemp = decodeData['main']['temp'];
-print('Temperature: $wtemp');
-
-int weatherId = decodeData['weather'][0]['id'];
-print('Weather ID: $weatherId');
-
-String name = decodeData['name'];
-print('City Name: $name');
-*/
