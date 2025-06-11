@@ -27,18 +27,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
     final double lon = -116.5453; // or: location.longitude
 
     NetworkHelper networkHelper = NetworkHelper(
-      'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$apiKey',
+      'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$apiKey&units=imperial'
     );
 
     var weatherData = await networkHelper.getData();
-    print(weatherData);
+    //print(weatherData);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LocationScreen(),
-      ),
-    );
+    Navigator.push( context, MaterialPageRoute(builder: (context) {
+      return LocationScreen(locationWeather: weatherData,
+      );
+    }));
   }
 
   @override
