@@ -3,7 +3,7 @@ import 'package:section13/screens/loading_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //git init && git add . && git commit -m "Initial commit" && git remote add origin https://github.com/bsanderson1981/section8 && git branch -M main && git push -u origin main
-//finished  of section 13  #149
+//finished  of section 13  #150
 //void main() => runApp(MyApp());
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // REQUIRED when doing async in main
