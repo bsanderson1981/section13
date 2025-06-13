@@ -1,4 +1,39 @@
+//import 'dart:ffi';
+
+import 'package:section13/services/networking.dart';
+import '/services/location.dart';
+//import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+const openWeatherMapUrl =  'https://api.openweathermap.org/data/2.5/weather';
+
 class WeatherModel {
+
+  Future <dynamic> getLocationWeather  () async{
+
+    final String? apiKey = dotenv.env['OPEN_WEATHER_API_KEY'];
+    print('$apiKey');
+    if (apiKey == null) {
+      //print("❌ API key not loaded from .env");
+      return;
+    }
+    Location location = Location();
+    await location.getCurrentLocation();
+
+    // Using Palm Springs coordinates for now
+    final double lat = 33.8303; // or: location.latitude
+    final double lon = -116.5453; // or: location.longitude
+
+    NetworkHelper networkHelper = NetworkHelper(
+        '$openWeatherMapUrl?lat=$lat&lon=$lon&appid=$apiKey&units=imperial'
+    );
+
+    var weatherData = await networkHelper.getData();
+    print(weatherData);
+    return weatherData;
+
+  }
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';

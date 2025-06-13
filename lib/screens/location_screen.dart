@@ -61,8 +61,11 @@ String? weatherIcon;
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   TextButton(
-                  //  '$cityName',
-                    onPressed: () {},
+
+                    onPressed: () async {
+                      var weatherData  = await  weather.getLocationWeather();
+                      updateUI(weatherData);
+                    },
                     child: Icon(
                       Icons.near_me,
                       size: 50.0,
