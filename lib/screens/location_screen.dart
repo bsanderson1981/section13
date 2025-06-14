@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:section13/screens/city_screen.dart';
 import 'package:section13/utilities/constants.dart';
 import 'package:section13/services/weather.dart';
 
@@ -80,12 +81,22 @@ String? weatherIcon;
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return CityScreen();
+                          },
+                        ),
+                      );
+                    },
                     child: Icon(
                       Icons.location_city,
                       size: 50.0,
                     ),
                   ),
+
                 ],
               ),
               Padding(
