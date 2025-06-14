@@ -21,8 +21,8 @@ class WeatherModel {
     await location.getCurrentLocation();
 
     // Using Palm Springs coordinates for now
-    final double lat = 33.8303; // or: location.latitude
-    final double lon = -116.5453; // or: location.longitude
+    double? lat = 0; // or: location.latitude
+    double? lon = 0; // or: location.longitude
 
     NetworkHelper networkHelper = NetworkHelper(
         '$openWeatherMapUrl?lat=$lat&lon=$lon&appid=$apiKey&units=imperial'

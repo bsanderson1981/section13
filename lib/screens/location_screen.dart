@@ -28,7 +28,15 @@ String? weatherIcon;
 
   void updateUI (dynamic weatherData){
     setState(() {
+//check before load screens we have weather date or not
+  if (weatherData == null) {
+    temperature = 0;
+    weatherIcon = 'Error';
+    messageText = 'Unable to get weather data';
+    cityName = '';
+    return;
 
+  }
 
     temperature = weatherData['main']['temp'];
     int tempRound =  temperature.round();
